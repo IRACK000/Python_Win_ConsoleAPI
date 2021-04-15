@@ -1,16 +1,11 @@
 import os
 from winAPI import *
+import colorset as winAPI
 
 if __name__ == '__main__':
-    changeTxtColor(4)
+    for colr in winAPI.colorset.values():
+        gotoXY(colr, colr+1)
+        changeTxtColor(colr)
+        print("%d, %d" % (wrIsX(), wrIsY()))
     hideConsoleCursor(1)
-    print("Hello")
-    gotoxy(1, 1)
-    changeTxtColor(5)
-    print("Hello")
-    gotoxy(2, 6)
-    changeTxtColor(6)
-    print("Hello")
-    gotoxy(3, 8)
-    changeTxtColor(7)
     os.system("pause")
