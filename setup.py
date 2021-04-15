@@ -10,7 +10,7 @@ setup(
     author="IRACK",
     author_email="",
     license="MIT",
-    ext_modules=[Extension("winAPI", ["pywinAPI.c.c"])],
+    ext_modules=[Extension("winAPI", ["pywinAPI.c"])],
     python_requires=">=2.8",
     include_package_data=True,
     classifiers=[
