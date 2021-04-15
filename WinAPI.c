@@ -1,4 +1,4 @@
-﻿/* Coded with C Grammar for MSVC in Windows
+/* Coded with C Grammar for MSVC in Windows
    This Source uses UTF-8-BOM encoding & CRLF (Windows) line endings
    Alias : WinAPI.c & Last Modded : 2021.04.14.
    Windows NT API 함수를 정의 Coded by IRACK
@@ -13,13 +13,28 @@
   #define HIDE 1 // hideConsoleCursor 함수의 콘솔 커서 숨기기 옵션
 #endif
 
-void gotoxy(int x, int y); // 콘솔창 커서 좌표 이동 함수
+void gotoXY(int x, int y); // 콘솔창 커서 좌표 이동 함수
+int wrIsX(void); // 콘솔창 커서 X축(가로) 좌표 리턴 함수
+int wrIsY(void); // 콘솔창 커서 Y축(세로) 좌표 리턴 함수
 void changeTxtColor(int const color); // 콘솔창 글자 색 변경 함수
 void hideConsoleCursor(_Bool const hide_flag); // 콘솔창 커서 깜박임 제거 함수
 
-void gotoxy(int x, int y) {
+void gotoXY(int x, int y) {
   COORD position = {x, y};
   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position); // Windows API 사용
+}
+
+int wrIsX(void) {
+  CONSOLE_SCREEN_BUFFER_INFO presentCur;
+  GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &presentCur); // Windows API 사용
+  return presentCur.dwCursorPosition.X;
+}
+
+int wrIsY(void) {
+  CONSOLE_SCREEN_BUFFER_INFO presentCur;
+  GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &presentCur); // Windows API 사용
+  return presentCur.dwCursorPosition.Y;
+
 }
 
 void changeTxtColor(int const color) {
