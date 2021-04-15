@@ -10,11 +10,13 @@
 // 참고 : https://choiseokwon.tistory.com/250?category=247927
 // 참고 : https://docs.python.org/ko/3/c-api/arg.html#c.PyArg_UnpackTuple
 
-static PyObject *gotoxy(PyObject *self, PyObject *arg); // 콘솔창 커서 좌표 이동 함수
+static PyObject *gotoXY(PyObject *self, PyObject *arg); // 콘솔창 커서 좌표 이동 함수
+static PyObject *wrIsX(PyObject *self, PyObject *arg); // 콘솔창 커서 X축(가로) 리턴 함수
+static PyObject *wrIsY(PyObject *self, PyObject *arg); // 콘솔창 커서 Y축(세로) 리턴 함수
 static PyObject *changeTxtColor(PyObject *self, PyObject *arg); // 콘솔창 글자 색 변경 함수
 static PyObject *hideConsoleCursor(PyObject *self, PyObject *arg); // 콘솔창 커서 깜박임 제거 함수
 
-static PyObject *gotoxy(PyObject *self, PyObject *arg) {
+static PyObject *gotoXY(PyObject *self, PyObject *arg) {
   PyObject *x;
   PyObject *y;
   if (!PyArg_UnpackTuple(arg, "i", 1, 2, &x, &y)) {
@@ -25,6 +27,18 @@ static PyObject *gotoxy(PyObject *self, PyObject *arg) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position); // Windows API 사용
   }
   return arg;
+}
+
+static PyObject *wrIsX(PyObject *self, PyObject *arg) {
+  CONSOLE_SCREEN_BUFFER_INFO presentCur;
+  GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &presentCur); // Windows API 사용
+  return PyLong_FromLong(presentCur.dwCursorPosition.X);
+}
+
+static PyObject *wrIsY(PyObject *self, PyObject *arg) {
+  CONSOLE_SCREEN_BUFFER_INFO presentCur;
+  GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &presentCur); // Windows API 사용
+  return PyLong_FromLong(presentCur.dwCursorPosition.Y);
 }
 
 static PyObject *changeTxtColor(PyObject *self, PyObject *arg) {
@@ -57,7 +71,9 @@ static PyObject *hideConsoleCursor(PyObject *self, PyObject *arg) {
 }
 
 static PyMethodDef methods[] = {
-    {"gotoxy", gotoxy, METH_VARARGS, "Move cursor to (x, y)."},
+    {"gotoXY", gotoXY, METH_VARARGS, "Move cursor to (x, y)."},
+    {"wrIsX", wrIsX, METH_NOARGS, "Change text color to N."},
+    {"wrIsY", wrIsY, METH_NOARGS, "Change text color to N."},
     {"changeTxtColor", changeTxtColor, METH_O, "Change text color to N."},
     {"hideConsoleCursor", hideConsoleCursor, METH_O, "Hide console cursor."},
     {NULL, NULL, 0, NULL}
