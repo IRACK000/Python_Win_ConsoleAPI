@@ -1,4 +1,4 @@
-# Win_Console_API
+# Python Win_ConsoleAPI
 Windows Console API
 
 ## C Code : winAPI.c
